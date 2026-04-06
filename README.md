@@ -1,43 +1,81 @@
-# Astro Starter Kit: Minimal
+# 26AJ クラス分け判定
 
-```sh
-pnpm create astro@latest -- --template minimal
+履修登録のクラス分けを自動判定するWebアプリケーション。
+
+## 🚀 技術スタック
+
+- **Astro 6** - 静的サイトジェネレーター
+- **Tailwind CSS** - スタイリング
+- **TypeScript** - 型安全な開発
+- **Cloudflare Pages** - デプロイ環境
+
+## 🎨 テーマシステム
+
+このプロジェクトには、Astroネイティブなダークモード対応が実装されています：
+
+### コンポーネント構成
+
+- **`ThemeSelector.astro`** - テーマ切り替えボタンとメニュー
+- **`ThemeScript.astro`** - フラッシュ防止のための初期化スクリプト
+- **`lib/theme.ts`** - テーマ管理のユーティリティ関数
+
+### 使い方
+
+```astro
+---
+import ThemeSelector from '@/components/ThemeSelector.astro';
+import ThemeScript from '@/components/ThemeScript.astro';
+---
+
+<html lang="ja">
+  <head>
+    <!-- Theme color meta tag -->
+    <meta id="themeColorMeta" name="theme-color" content="#ffffff" />
+    
+    <!-- Theme initialization script (prevents flash) -->
+    <ThemeScript />
+  </head>
+  <body class="bg-white dark:bg-slate-900">
+    <header>
+      <ThemeSelector />
+    </header>
+  </body>
+</html>
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### 特徴
 
-## 🚀 Project Structure
+- ✅ ライト/ダーク/システムテーマの3モード
+- ✅ ローカルストレージに設定を保存
+- ✅ フラッシュ防止（FOUC対策）
+- ✅ システムテーマ変更の自動検知
+- ✅ Tailwindのdarkモードと完全連携
+- ✅ アクセシビリティ対応
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🧞 コマンド
+
+| コマンド | 説明 |
+| :--- | :--- |
+| `pnpm install` | 依存関係をインストール |
+| `pnpm dev` | 開発サーバー起動（localhost:4321） |
+| `pnpm build` | 本番ビルド（./dist/） |
+| `pnpm preview` | ビルドをローカルでプレビュー |
+
+## 📦 プロジェクト構造
 
 ```text
 /
-├── public/
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/
+│   │   ├── ThemeSelector.astro  # テーマ切り替えコンポーネント
+│   │   └── ThemeScript.astro    # テーマ初期化スクリプト
+│   ├── lib/
+│   │   └── theme.ts              # テーマユーティリティ
+│   ├── pages/
+│   │   └── index.astro           # メインページ
+│   └── utils/
+│       └── classification.ts     # クラス分け判定ロジック
+├── astro.config.mjs
+├── tailwind.config.mjs
+└── tsconfig.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

@@ -1,4 +1,6 @@
 ---
+import ThemeSelector from '@/components/ThemeSelector.astro';
+import ThemeScript from '@/components/ThemeScript.astro';
 ---
 
 <!DOCTYPE html>
@@ -9,20 +11,13 @@
     <title>26AJ クラス分け判定</title>
     <meta name="description" content="履修登録のクラス分けを自動判定します。" />
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="26AJ クラス分け判定" />
-    <meta property="og:description" content="履修登録のクラス分けを自動判定します。" />
-    <meta property="og:type" content="website" />
+    <meta id="themeColorMeta" name="theme-color" content="#ffffff" />
     
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="26AJ クラス分け判定" />
-    <meta name="twitter:description" content="履修登録のクラス分けを自動判定します。" />
-    
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <ThemeScript />
     
     <style>
       html {
@@ -32,40 +27,48 @@
       body {
         font-family: 'Inter', 'Noto Sans JP', sans-serif;
       }
+      
+      .theme-transitioning,
+      .theme-transitioning *,
+      .theme-transitioning *::before,
+      .theme-transitioning *::after {
+        transition: none !important;
+        animation: none !important;
+      }
     </style>
   </head>
-  <body class="bg-white min-h-screen">
-    <!-- Header -->
+  <body class="bg-white dark:bg-slate-900 min-h-screen">
     <header class="py-6 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-5xl mx-auto text-center">
-        <h1 class="text-xl font-medium text-gray-900">
+      <div class="max-w-5xl mx-auto flex items-center justify-between">
+        <div class="flex-1"></div>
+        <h1 class="text-xl font-medium text-gray-900 dark:text-slate-100">
           26AJ クラス分け判定
         </h1>
+        <div class="flex-1 flex justify-end">
+          <ThemeSelector />
+        </div>
       </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Input Section -->
       <div class="mb-8 flex justify-center">
         <div class="w-full max-w-xs">
-          <label for="studentNumber" class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="studentNumber" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
             学籍番号末尾3桁
           </label>
           <input
             type="number"
             id="studentNumber"
-            class="w-full px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+            class="w-full px-4 py-2 text-base border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 focus:outline-none focus:border-gray-900 dark:focus:border-slate-500 focus:ring-1 focus:ring-gray-900 dark:focus:ring-slate-500"
             placeholder="例: 123"
             min="1"
             max="999"
             autocomplete="off"
           />
-          <div id="errorMessage" class="hidden mt-2 text-sm text-gray-700"></div>
+          <div id="errorMessage" class="hidden mt-2 text-sm text-gray-700 dark:text-slate-300"></div>
         </div>
       </div>
 
-      <!-- Results -->
       <div id="results" class="hidden space-y-12"></div>
     </main>
 
@@ -79,22 +82,22 @@
 
       function createClassCard(classInfo: ClassInfo): string {
         return `
-          <div class="border border-gray-200 rounded-lg p-5">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          <div class="border border-gray-200 dark:border-slate-700 rounded-lg p-5 bg-white dark:bg-slate-800">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">
               ${classInfo.subject}
             </h3>
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-600">曜日・時限</span>
-                <span class="text-gray-900 font-medium">${classInfo.dayTime}</span>
+                <span class="text-gray-600 dark:text-slate-400">曜日・時限</span>
+                <span class="text-gray-900 dark:text-slate-100 font-medium">${classInfo.dayTime}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">教員</span>
-                <span class="text-gray-900 font-medium">${classInfo.teacher}</span>
+                <span class="text-gray-600 dark:text-slate-400">教員</span>
+                <span class="text-gray-900 dark:text-slate-100 font-medium">${classInfo.teacher}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">教室</span>
-                <span class="text-gray-900 font-medium">${classInfo.classroom}</span>
+                <span class="text-gray-600 dark:text-slate-400">教室</span>
+                <span class="text-gray-900 dark:text-slate-100 font-medium">${classInfo.classroom}</span>
               </div>
             </div>
           </div>
@@ -106,7 +109,7 @@
         
         return `
           <div class="semester-section">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-4">
               ${semesterData.semester}
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -119,7 +122,6 @@
       function handleInput() {
         const value = inputField.value;
         
-        // 空の場合は結果を非表示
         if (!value.trim()) {
           errorMessage.classList.add('hidden');
           resultsContainer.classList.add('hidden');
@@ -135,16 +137,13 @@
           return;
         }
 
-        // 入力が有効な場合
         errorMessage.classList.add('hidden');
         const semesterGroups = classifyStudent(validation.number!);
         
-        // 結果を表示
         resultsContainer.innerHTML = semesterGroups.map(createSemesterSection).join('');
         resultsContainer.classList.remove('hidden');
       }
 
-      // リアルタイム判定
       inputField.addEventListener('input', handleInput);
     </script>
   </body>

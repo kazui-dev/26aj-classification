@@ -8,7 +8,7 @@ import {
 
 /**
  * 学籍番号末尾3桁からクラス分けを判定する
- * @param studentNumber 学籍番号末尾3桁（1-999）
+ * @param studentNumber 学籍番号末尾3桁（1-126）
  * @returns 4科目のクラス情報
  */
 export function classifyStudent(studentNumber: StudentNumber): ClassInfo[] {
@@ -61,11 +61,11 @@ export function validateStudentNumber(value: string): {
     };
   }
 
-  // 範囲チェック（1-999）
-  if (num < 1 || num > 999) {
+  // 範囲チェック（1-126）
+  if (num < 1 || num > 126) {
     return {
       isValid: false,
-      error: '1〜999の範囲で入力してください',
+      error: '1〜126の範囲で入力してください',
     };
   }
 

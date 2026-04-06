@@ -1,8 +1,10 @@
 {
   "name": "26aj-classification",
   "compatibility_date": "2024-01-01",
-  "directory": "./dist",
   "observability": {
     "enabled": false
+  },
+  "assets": {
+    "directory": "./dist"
   }
 }

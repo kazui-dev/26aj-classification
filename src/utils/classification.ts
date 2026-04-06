@@ -1,36 +1,48 @@
-import type { ClassInfo, StudentNumber } from '../types';
+import type { ClassInfo, StudentNumber, SemesterClasses } from '../types';
 import {
-  INFO_SYSTEMS_CLASSES,
-  PROGRAMMING1_CLASSES,
-  PROGRAMMING2_CLASSES,
-  DATA_SCIENCE_CLASSES,
+  FOUNDATIONS_OF_INFORMATION_SYSTEMS_CLASSES,
+  COMPUTER_PROGRAMMING_1_CLASSES,
+  COMPUTER_PROGRAMMING_2_CLASSES,
+  INTRODUCTION_TO_MATHEMATICS_AND_DATA_SCIENCE_CLASSES,
+  FOUNDATIONS_OF_INFORMATION_AND_COMMUNICATION_CLASSES,
+  DIGITAL_CIRCUIT_CLASSES,
+  COMPUTER_PROGRAMMING_3_CLASSES,
+  PROBABILITY_AND_STATISTICS_CLASSES,
 } from './classData';
 
 /**
  * 学籍番号末尾3桁からクラス分けを判定する
  * @param studentNumber 学籍番号末尾3桁（1-999）
- * @returns 4科目のクラス情報
+ * @returns 学期ごとにグループ化されたクラス情報
  */
-export function classifyStudent(studentNumber: StudentNumber): ClassInfo[] {
-  // 情報システムの基礎: num % 3
-  const infoSystemsClass = INFO_SYSTEMS_CLASSES[studentNumber % 3];
+export function classifyStudent(studentNumber: StudentNumber): SemesterClasses[] {
+  // 1年前期
+  const firstSemesterClasses: ClassInfo[] = [
+    FOUNDATIONS_OF_INFORMATION_SYSTEMS_CLASSES[studentNumber % 3],
+    COMPUTER_PROGRAMMING_1_CLASSES[studentNumber % 3],
+    COMPUTER_PROGRAMMING_2_CLASSES[studentNumber % 3],
+    INTRODUCTION_TO_MATHEMATICS_AND_DATA_SCIENCE_CLASSES[
+      studentNumber % 4 <= 1 ? '0,1' : '2,3'
+    ],
+  ];
 
-  // コンピュータプログラミングⅠ: num % 3
-  const programming1Class = PROGRAMMING1_CLASSES[studentNumber % 3];
-
-  // コンピュータプログラミングⅡ: num % 3
-  const programming2Class = PROGRAMMING2_CLASSES[studentNumber % 3];
-
-  // 数理・データサイエンス入門: num % 4
-  const dataScienceRemainder = studentNumber % 4;
-  const dataScienceKey = dataScienceRemainder <= 1 ? '0,1' : '2,3';
-  const dataScienceClass = DATA_SCIENCE_CLASSES[dataScienceKey];
+  // 1年後期
+  const secondSemesterClasses: ClassInfo[] = [
+    FOUNDATIONS_OF_INFORMATION_AND_COMMUNICATION_CLASSES[studentNumber % 2],
+    DIGITAL_CIRCUIT_CLASSES[studentNumber % 3],
+    COMPUTER_PROGRAMMING_3_CLASSES[studentNumber % 3],
+    PROBABILITY_AND_STATISTICS_CLASSES[studentNumber % 2],
+  ];
 
   return [
-    infoSystemsClass,
-    programming1Class,
-    programming2Class,
-    dataScienceClass,
+    {
+      semester: '1年前期',
+      classes: firstSemesterClasses,
+    },
+    {
+      semester: '1年後期',
+      classes: secondSemesterClasses,
+    },
   ];
 }
 

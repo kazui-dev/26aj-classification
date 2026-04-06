@@ -18,6 +18,21 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="26AJ クラス分け判定" />
     <meta name="twitter:description" content="履修登録のクラス分けを自動判定します。" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      html {
+        scrollbar-gutter: stable;
+      }
+      
+      body {
+        font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      }
+    </style>
   </head>
   <body class="bg-white min-h-screen">
     <!-- Header -->
@@ -50,13 +65,13 @@
         </div>
       </div>
 
-      <!-- Results Grid -->
-      <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+      <!-- Results -->
+      <div id="results" class="hidden space-y-12"></div>
     </main>
 
     <script>
       import { classifyStudent, validateStudentNumber } from '../utils/classification';
-      import type { ClassInfo } from '../types';
+      import type { ClassInfo, SemesterClasses } from '../types';
 
       const inputField = document.getElementById('studentNumber') as HTMLInputElement;
       const errorMessage = document.getElementById('errorMessage') as HTMLDivElement;
@@ -64,7 +79,7 @@
 
       function createClassCard(classInfo: ClassInfo): string {
         return `
-          <div class="border border-gray-200 rounded p-5">
+          <div class="border border-gray-200 rounded-lg p-5">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">
               ${classInfo.subject}
             </h3>
@@ -81,6 +96,21 @@
                 <span class="text-gray-600">教室</span>
                 <span class="text-gray-900 font-medium">${classInfo.classroom}</span>
               </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function createSemesterSection(semesterData: SemesterClasses): string {
+        const cardsHtml = semesterData.classes.map(createClassCard).join('');
+        
+        return `
+          <div class="semester-section">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              ${semesterData.semester}
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              ${cardsHtml}
             </div>
           </div>
         `;
@@ -107,10 +137,10 @@
 
         // 入力が有効な場合
         errorMessage.classList.add('hidden');
-        const classes = classifyStudent(validation.number!);
+        const semesterGroups = classifyStudent(validation.number!);
         
         // 結果を表示
-        resultsContainer.innerHTML = classes.map(createClassCard).join('');
+        resultsContainer.innerHTML = semesterGroups.map(createSemesterSection).join('');
         resultsContainer.classList.remove('hidden');
       }
 
